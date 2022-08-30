@@ -1,8 +1,9 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:stock/graph_screen/view/graph_screen.dart';
 
-import 'package:stock/home/model/controller/home_controller.dart';
+import 'package:stock/home/controller/home_controller.dart';
 import 'package:stock/home/model/stock_data_model.dart';
 import 'package:stock/utils/variable_utilities.dart';
 
@@ -32,7 +33,10 @@ class HomeScreen extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                                        //for graph
+                             //for history page of most expensive stock
+                             controller.addData();
+                            Get.to(GraphScreen(),arguments:controller.maxValueStockName);
+                                      
                           },
                           child: Container(
                             height: 30,
@@ -90,8 +94,10 @@ class HomeScreen extends StatelessWidget {
                                         stockName: controller
                                             .stockData!.data[index].sid,
                                         onTap: () {
-                                          
-                                          //for graph
+                                          Get.to(()=>GraphScreen(),arguments:
+                                          controller
+                                              .stockData!.data[index].sid);
+                                        
                                         },
                                         isDown: controller.stockData!
                                             .data[index].change.isNegative),

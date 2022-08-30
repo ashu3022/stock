@@ -38,6 +38,7 @@ dependencies:
   http: ^0.13.5
   get_storage: 2.0.2
   fl_chart:
+  zoom_widget: ^0.2.1
 
 dev_dependencies:
   flutter_test:
