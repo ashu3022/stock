@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:js';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get_storage/get_storage.dart';
@@ -82,6 +83,8 @@ class HomeScreenController extends GetxController {
             storeDataModel.add(StoredDataModel(
                 rate: element.price,
                 date: element.date,
+                 change: element.change,
+                 close: element.close,
                 stockName: element.sid));
             update();
           });

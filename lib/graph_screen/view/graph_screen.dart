@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:stock/graph_screen/controller/graph_controller.dart';
 import 'package:stock/utils/variable_utilities.dart';
 
+
 class GraphScreen extends StatelessWidget {
   GraphScreen({Key? key}) : super(key: key);
   GraphScreenController controller = Get.put(GraphScreenController());
@@ -18,21 +19,21 @@ class GraphScreen extends StatelessWidget {
         child: GetBuilder<GraphScreenController>(
             init: controller,
             builder: (_) {
-              double change = 0;
+              double change = controller.filteredData.last.change;
               double secondLast = 0;
               int green;
               double last =
-                  controller.priceList[controller.priceList.length - 1];
-              if (controller.priceList.length < 1)
-                change = last;
-              else {
-                change =
-                    (controller.priceList[controller.priceList.length - 2] -
-                            last)
-                        .toPrecision(2);
-                secondLast =
-                    controller.priceList[controller.priceList.length - 2];
-              }
+                  controller.filteredData.last.close;
+              // if (controller.priceList.length < 1)
+              //   change = last;
+              // else {
+              //   change =
+              //       (controller.priceList[controller.priceList.length - 2] -
+              //               last)
+              //           .toPrecision(2);
+              //   secondLast =
+              //       controller.priceList[controller.priceList.length - 2];
+              // }
               if (change > 0)
                 green = 1;
               else if (change == 0)
@@ -40,13 +41,13 @@ class GraphScreen extends StatelessWidget {
               else
                 green = -1;
                 // yaha kia
-              if (controller.priceList.length == 0)
-                return Scaffold(
-                  body: Text(
-                    "No data recorded",
-                    style: TextStyle(fontSize: 12),
-                  ),
-                );
+              // if (controller.priceList.length == 0)
+              //   return Scaffold(
+              //     body: Text(
+              //       "No data recorded",
+              //       style: TextStyle(fontSize: 12),
+              //     ),
+              //   );
 
               return SingleChildScrollView(
                 scrollDirection: Axis.vertical,
@@ -101,13 +102,14 @@ class GraphScreen extends StatelessWidget {
                               ),
                             //Icon(Icons.arrow_upward_sharp ,color:Colors.green)?green==1:Icon(Icons.arrow_downward_sharp,color:Colors.red),
                             Text("${change.abs()}"),
-                            if (secondLast != 0 && change > 0)
+                           // Text("  "+"${last}"),
+                            if ( change > 0)
                               Text("(+" +
-                                  "${((change.abs() / secondLast) * 100).toStringAsPrecision(2)}" +
+                                  "${((change.abs() / last) * 100).toPrecision(2)}" +
                                   "%)")
-                            else if (secondLast != 0 && change < 0)
+                            else if (change < 0)
                               Text("(-" +
-                                  "${((change.abs() * 100 / secondLast)).toPrecision(2)}" +
+                                  "${((change.abs() * 100 / last)).toPrecision(2)}" +
                                   "%)")
                             else
                               Text("(+0%)")

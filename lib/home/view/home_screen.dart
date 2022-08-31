@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -19,7 +20,7 @@ class HomeScreen extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 25),
           child: GetBuilder<HomeScreenController>(
-              init: controller, 
+              init: controller,
               builder: (_) {
                 return Column(
                   children: [
@@ -33,10 +34,28 @@ class HomeScreen extends StatelessWidget {
                         const Spacer(),
                         GestureDetector(
                           onTap: () {
-                             //for history page of most expensive stock
-                             controller.addData();
-                            Get.to(GraphScreen(),arguments:controller.maxValueStockName);
-                                      
+                            List<StoredDataModel>? data =
+                                controller.storage.read("Data");
+                            //for history page of most expensive stock
+                            if (data != null) {
+                              controller.addData();
+                              Get.to(GraphScreen(),
+                                  arguments: controller.maxValueStockName);
+                            } else {
+                              Get.showSnackbar(GetSnackBar(
+                                title: "No data recorded yet",
+                                message: "Press play button",
+                                duration: Duration(seconds: 5),
+                              ));
+                              // Timer.periodic(Duration(seconds: 4), (timer) {
+                              controller.maxValueStockName = "TCS";
+                              Get.to(GraphScreen(),
+                                  arguments: controller.maxValueStockName
+                                  //arguments: controller.
+
+                                  );
+                              //});
+                            }
                           },
                           child: Container(
                             height: 30,
@@ -65,8 +84,8 @@ class HomeScreen extends StatelessWidget {
                                 color: Colors.black, shape: BoxShape.circle),
                             child: Icon(
                               controller.isResume
-                                  ? Icons.play_arrow
-                                  : Icons.pause,
+                                  ? Icons.pause
+                                  : Icons.play_arrow,
                               color: Colors.white,
                               size: 20,
                             ),
@@ -84,7 +103,6 @@ class HomeScreen extends StatelessWidget {
                               padding: const EdgeInsets.only(top: 15),
                               itemCount: controller.stockData?.data.length ?? 0,
                               itemBuilder: (context, index) {
-
                                 return Column(
                                   children: [
                                     buildDataTile(
@@ -94,10 +112,27 @@ class HomeScreen extends StatelessWidget {
                                         stockName: controller
                                             .stockData!.data[index].sid,
                                         onTap: () {
-                                          Get.to(()=>GraphScreen(),arguments:
-                                          controller
-                                              .stockData!.data[index].sid);
-                                        
+                                          List<StoredDataModel>? data =
+                                              controller.storage.read("Data");
+                                          //for history page of most expensive stock
+                                          if (data != null) {
+                                            controller.addData();
+                                            Get.to(() => GraphScreen(),
+                                                arguments: controller.stockData!
+                                                    .data[index].sid);
+                                          } else {
+                                            Get.showSnackbar(GetSnackBar(
+                                              title: "No data recorded yet",
+                                              message: "Press play button ",
+                                              duration: Duration(seconds: 3),
+                                            ));
+                                            // Timer.periodic(Duration(seconds: 3),
+                                            //   (timer) {
+                                            Get.to(() => GraphScreen(),
+                                                arguments: controller.stockData!
+                                                    .data[index].sid);
+                                            // });
+                                          }
                                         },
                                         isDown: controller.stockData!
                                             .data[index].change.isNegative),
@@ -110,8 +145,6 @@ class HomeScreen extends StatelessWidget {
                               },
                             ),
                           ),
-
-
                   ],
                 );
               }),

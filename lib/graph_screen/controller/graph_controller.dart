@@ -7,7 +7,33 @@ class GraphScreenController extends GetxController {
   GetStorage storage = GetStorage();
   List<StoredDataModel> storeDataModel = [];
   getData() {
-    storeDataModel = storage.read("Data");
+    var data = storage.read("Data");
+    if (data != null) {
+      storeDataModel = data;
+    } else {
+     storeDataModel.add(StoredDataModel(
+      change:0.0 ,close:0.01 ,date:DateTime.now() ,rate:0.0 ,stockName:"TCS",
+      ), 
+     );
+       storeDataModel.add(StoredDataModel(
+      change:0.0 ,close:0.01 ,date:DateTime.now() ,rate:0.0 ,stockName:"RELI",
+      ), 
+     );
+       storeDataModel.add(StoredDataModel(
+      change:0.0 ,close:0.01 ,date:DateTime.now() ,rate:0.0 ,stockName:"HDBK",
+      ), 
+     );
+       storeDataModel.add(StoredDataModel(
+      change:0.0 ,close:0.01 ,date:DateTime.now() ,rate:0.0 ,stockName:"INFY",
+      ), 
+     );
+       storeDataModel.add(StoredDataModel(
+      change:0.01 ,close:0.01 ,date:DateTime.now() ,rate:0.0 ,stockName:"ITC",
+      ), 
+     );
+     
+     
+    }
     update();
   }
 
@@ -25,6 +51,8 @@ class GraphScreenController extends GetxController {
       if (element.stockName == name) {
         filteredData.add(StoredDataModel(
             date: element.date,
+            change: element.change,
+            close: element.close,
             rate: element.rate,
             stockName: element.stockName));
         priceList.add(element.rate);
@@ -57,7 +85,5 @@ class StoreDataModel {
   double rate;
   String stockName;
   StoreDataModel(
-      {required this.time, 
-      required this.rate,
-       required this.stockName});
+      {required this.time, required this.rate, required this.stockName});
 }
